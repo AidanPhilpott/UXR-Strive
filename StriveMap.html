@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Strive Network Map</title>
+  <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+  <meta charset="utf-8">
+
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+
+  <style>
+    /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background: #b260ff; /* Old browsers */
+        background: -moz-linear-gradient(top, #b260ff 0%, #4400c9 100%); /* FF3.6-15 */
+        background: -webkit-linear-gradient(top, #b260ff 0%,#4400c9 100%); /* Chrome10-25,Safari5.1-6 */
+        background: linear-gradient(to bottom, #b260ff 0%,#4400c9 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+      }
+      #floating-panel {
+        position: absolute;
+        top: 10px;
+        left: 25%;
+        z-index: 5;
+        background-color: #fff;
+        padding: 5px;
+        border: 1px solid #999;
+        text-align: center;
+        font-family: 'Roboto','sans-serif';
+        line-height: 30px;
+        padding-left: 10px;
+      }
+    </style>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="stylenew.css"/>
+
+</head>
+
+<body>
+    <div id="map"></div>
+    <div id="side">
+      <div id="contentS">
+        <h3 class="title">STRIVE<span style="color:#FFC200;">.</span></h3>
+        <p id="date"></p>
+        <p class="intp">Roy Thompson Hall</p>
+        <div id="sidecont">
+        <p class="intpsec"><i class="fas fa-users"></i>  Attendees</p>
+        <h5 id="number">0</h5>
+        <p class="intpsec"><i class="fas fa-clock"></i>  Next speaker in:</p>
+        <h5 id="clock">--:--</h5>
+        </div>
+        <div id="atList">
+          <p class="intpsec"><i class="fas fa-id-badge"></i>  Who is here</p>
+          <p class="intpsect"><span id='boldStuff2'></span></p>
+          <ul id="demo"></ul>
+        </div>
+      </div>
+
+      <button id="startbtn" type="button" class="btn btn-outline-warning">Check In</button>
+
+    </div>
+  <div id="interface">
+    <button type="button" id="closebtn" class="btn btn-outline-warning"><i class="fas fa-times"></i></button>
+    <div id="intercont">
+      <h2>Let's get started</h2>
+      <input class="formin" id="name" type="textbox" placeholder="Name"><br/>
+      <input class="formin" id="address" type="textbox" placeholder="Company, Location"><br/>
+      <input class="formin" id="netlink" type="textbox" placeholder="LinkedIn, Portfolio, etc (Optional)"><br/>
+      <input class="btn btn-outline-warning subbtn" style="margin-top:2em;" onClick="onClick()" id="submit" type="button" value="Submit">
+    </div>
+  </div>
+
+
+
+
+  <script>
+    function initMap() {
+      // Styles a map in night mode.
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: {
+          lat: 40.674,
+          lng: -73.945
+        },
+        disableDefaultUI: true,
+        zoom: 7,
+        styles: [{
+            elementType: 'geometry',
+            stylers: [{
+              color: '#002F4A'
+            }]
+          },
+          {
+            elementType: 'labels.text.stroke',
+            stylers: [{visibility: 'off'}]
+          },
+          {
+            elementType: 'labels.text.fill',
+            stylers: [{
+              color: '#FFFFF;'
+            }]
+          },
+          {
+            featureType: 'administrative.locality',
+            elementType: 'labels.text.fill',
+            stylers: [{
+              color: '#FFC200;'
+            }]
+          },
+          {
+            featureType: 'poi',
+            elementType: 'labels.text.fill',
+            stylers: [{visibility: 'off'}]
+
+          },
+          {
+            featureType: 'poi.park',
+            elementType: 'geometry',
+            stylers: [{
+              color: '#001B2C'
+            }]
+          },
+          {
+            featureType: 'poi.park',
+            elementType: 'labels.text.fill',
+            stylers: [{
+              color: '#FFFFFF'
+            }]
+          },
+          {
+            featureType: 'road',
+            elementType: 'geometry',
+            stylers: [{
+              color: '#0A0E10'
+            }]
+          },
+          {
+            featureType: 'road',
+            elementType: 'geometry.stroke',
+            stylers: [{
+              color: '#0A0E10'
+            }]
+          },
+          {
+            featureType: 'road',
+            elementType: 'labels',
+            stylers: [{visibility: 'off'}]
+          },
+          {
+            featureType: 'road.highway',
+            elementType: 'geometry',
+            stylers: [{
+              color: '#000B17'
+            }]
+          },
+          {
+            featureType: 'road.highway',
+            elementType: 'geometry.stroke',
+            stylers: [{visibility: 'off'}]
+
+          },
+          {
+            featureType: 'road.highway',
+            elementType: 'labels.text.fill',
+            stylers: [{visibility: 'off'}]
+
+          },
+          {
+            featureType: 'transit',
+            elementType: 'geometry',
+            stylers: [{
+              color: '#000B17'
+            }]
+          },
+          {
+            featureType: 'transit.station',
+            elementType: 'labels.text.fill',
+            stylers: [{visibility: 'off'}]
+
+          },
+          {
+            featureType: 'water',
+            elementType: 'geometry',
+            stylers: [{
+              color: '#00131E'
+            }]
+          },
+          {
+            featureType: 'water',
+            elementType: 'labels.text.fill',
+            stylers: [{visibility: 'off'}]
+
+          },
+          {
+            featureType: 'water',
+            elementType: 'labels.text.stroke',
+            stylers: [{visibility: 'off'}]
+
+          }
+        ]
+      });
+
+      var geocoder = new google.maps.Geocoder();
+
+
+
+      document.getElementById('submit').addEventListener('click', function() {
+        geocodeAddress(geocoder, map);
+        document.getElementById("interface").style.display = "none";
+        document.getElementById("startbtn").style.opacity = "1";
+
+
+
+
+
+      });
+
+      document.getElementById('closebtn').addEventListener('click', function() {
+        document.getElementById("interface").style.display = "none";
+        document.getElementById("startbtn").style.opacity = "1";
+      });
+
+
+      document.getElementById('startbtn').addEventListener('click', function() {
+        document.getElementById("interface").style.display = "inherit";
+        document.getElementById("startbtn").style.opacity = "0.25";
+      });
+    }
+
+
+    function geocodeAddress(geocoder, resultsMap) {
+      var address = document.getElementById('address').value;
+      geocoder.geocode({
+        'address': address
+      }, function(results, status) {
+        if (status === 'OK') {
+          resultsMap.setCenter(results[0].geometry.location);
+
+
+        /*  var image = {
+              url: "http://ixd759.firebird.sheridanc.on.ca/Asset%201.svg", // url
+              scaledSize: new google.maps.Size(20, 20), // scaled size
+              origin: new google.maps.Point(0,0), // origin
+              anchor: new google.maps.Point(0, 0) // anchor
+          };*/
+
+          var marker = new google.maps.Marker({
+            map: resultsMap,
+          //  icon: image,
+            draggable: true,
+            animation: google.maps.Animation.DROP,
+            position: results[0].geometry.location
+          });
+          marker.addListener('click', toggleBounce);
+
+          function toggleBounce() {
+
+        }
+
+          var name = document.getElementById('name').value;
+          var netlink = document.getElementById('netlink').value;
+
+          var content = '<div id="content">' +
+            '<h1>' + name + '</h1>'+
+            '<p>' + address + '</p>'+
+            '<a href="https://'+netlink+'"><i class="fas fa-link"></i> ' + netlink + '</a>'+
+            '</div>';
+
+          var infowindow = new google.maps.InfoWindow({
+            content: content,
+
+          });
+
+          marker.addListener('click', function() {
+            infowindow.open(map, marker);
+            console.log("Working");
+          });
+        } else {
+          alert('Geocode was not successful for the following reason: ' + status);
+        }
+          var list = document.getElementById('demo');
+
+          var firstname = document.getElementById('firstname').value;
+          document.getElementById('boldStuff2').innerHTML = name;
+          var entry = document.createElement('li');
+          entry.appendChild(document.createTextNode(firstname));
+          list.appendChild(entry);
+      });
+
+    }
+
+    n =  new Date();
+    y = n.getFullYear();
+    m = n.getMonth() + 1;
+    d = n.getDate();
+    document.getElementById("date").innerHTML = m + "/" + d + "/" + y;
+
+  </script>
+
+  <script type="text/javascript">
+  var clicks = 0;
+  var list = document.getElementById('demo');
+
+  function onClick() {
+    clicks += 1;
+    document.getElementById("number").innerHTML = clicks;
+    var firstname = document.getElementById('name').value;
+    var company = document.getElementById('address').value;
+
+    var entry = document.createElement('li');
+    entry.appendChild(document.createTextNode(firstname + "  |  " + company));
+    list.appendChild(entry);
+  };
+
+  setInterval(function time(){
+  var d = new Date();
+  var min = 60 - d.getMinutes();
+  if((min + '').length == 1){
+    min = '0' + min;
+  }
+  var sec = 60 - d.getSeconds();
+  if((sec + '').length == 1){
+        sec = '0' + sec;
+  }
+  jQuery('#clock').html(min+':'+sec)
+}, 1000);
+
+  </script>
+
+
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAp79zaN9B49I68hVt5klM5PcewCnXJ140&libraries=places"></script>
+  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAp79zaN9B49I68hVt5klM5PcewCnXJ140&callback=initMap">
+  </script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+
+</html>

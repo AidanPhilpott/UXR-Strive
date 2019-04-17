@@ -1,0 +1,52 @@
+#interface{
+  height: 100%;
+  width: 20%;
+  background-color: blue;
+  z-index: 9999;
+  float: left;
+}
+
+h1{
+  font-size: 1.25em;
+}
+
+#content{
+  font-size: 0.75em;
+  line-height: 1em;
+  text-align: center;
+}
+
+#infowindow{
+  background-color: red;
+}
+
+.formin{
+  width: 80%;
+  margin-left: 5%;
+  margin-bottom: 15px;
+  height: 2em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  padding-left: 1em;
+  padding-right: 1em;
+  border-radius: 50px;
+  border-style: none;
+}
+
+h2{
+  margin-left: 5%;
+  color: white;
+}
+
+.subbtn{
+  width: 87.5%;
+  margin-left: 5%;
+  margin-bottom: 15px;
+  height: 2em;
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+  padding-left: 1em;
+  padding-right: 1em;
+  border-radius: 50px;
+  border-style: none;
+}
